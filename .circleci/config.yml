@@ -74,7 +74,9 @@ jobs:
       - run:
           name: TestExit
           command: |
-            exit 1
+            cd frontend
+            npm i
+            npm run test
                 
   test-backend:
     docker:
@@ -83,7 +85,9 @@ jobs:
       - run:
           name: TestExit
           command: |
-            exit 1
+            cd backend
+            npm i
+            npm run test
             
   scan-frontend:
     docker:
