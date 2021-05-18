@@ -73,7 +73,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        key: frontend-build
+          key: frontend-build
       - run:
           name: TestExit
           command: |
@@ -87,7 +87,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        key: backend-build
+          key: backend-build
       - run:
           name: TestExit
           command: |
