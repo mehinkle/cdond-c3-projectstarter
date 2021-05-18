@@ -43,8 +43,9 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            # Your code here
-            exit 1
+            - checkout
+            - run: npm i
+            - run: npm run lint
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
