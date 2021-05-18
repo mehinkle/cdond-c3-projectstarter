@@ -75,7 +75,7 @@ jobs:
       - restore_cache:
           key: frontend-build
       - run:
-          name: TestExit
+          name: testfrontend
           command: |
             cd frontend
             npm i
@@ -89,7 +89,7 @@ jobs:
       - restore_cache:
           key: backend-build
       - run:
-          name: TestExit
+          name: testbackend
           command: |
             cd backend
             npm i
@@ -103,7 +103,7 @@ jobs:
       - restore_cache:
           key: frontend-build
       - run:
-          name: TestExit
+          name: scanfrontend
           command: |
             cd frontend
             npm audit --audit-level=critical
@@ -117,7 +117,7 @@ jobs:
       - restore_cache:
           key: backend-build
       - run:
-          name: TestExit
+          name: scanbackend
           command: |
             cd backend
             npm audit --audit-level=critical
