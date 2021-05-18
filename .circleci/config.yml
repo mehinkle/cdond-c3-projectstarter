@@ -99,20 +99,28 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
+      - restore_cache:
+          key: frontend-build
       - run:
           name: TestExit
           command: |
-            exit 1
+            cd frontend
+            npm audit --audit-level=critical
+
 
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
+      - restore_cache:
+          key: backend-build
       - run:
           name: TestExit
           command: |
-            exit 1
-
+            cd backend
+            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
