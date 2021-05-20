@@ -179,6 +179,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add ansible
+            pip install awscli
       - run:
           name: Configure server
           command: |
