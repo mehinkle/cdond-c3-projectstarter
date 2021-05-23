@@ -213,7 +213,7 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            #touch ~/project/backend/.env
+            ##touch ~/project/backend/.env
             #echo ENVIROMENT=production >> "backend/.env"
             #echo TYPEORM_CONNECTION=postgres >> "backend/.env"
             #echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
