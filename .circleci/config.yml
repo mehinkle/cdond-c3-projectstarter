@@ -268,6 +268,7 @@ jobs:
             npm install
             npm run build
             aws s3 sync dist s3://"udapeople-${CIRCLE_WORKFLOW_ID:0:7}"
+            aws s3 ls
       - destroy-environment
 
       # Here's where you will add some code to rollback on failure      
@@ -293,7 +294,9 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            # your code herex
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment  
 
   smoke-test:
