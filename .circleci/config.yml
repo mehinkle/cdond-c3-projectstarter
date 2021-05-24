@@ -248,20 +248,28 @@ jobs:
       - image: amazon/aws-cli:latest
     steps:
       # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            yum install -y gzip tar npm nodejs
+            curl -fsSL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum install -y nodejs
       - run:
           name: Get backend url
           command: |
-            # your code here
+            BACKEND_IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} Name=instance-state-name,Values=running --query Reservations[*].Instances[*].PublicIpAddress --no-paginate --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+            npm install
+            npm run build
+            aws s3 sync dist s3://"udapeople-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment
+
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -272,22 +280,28 @@ jobs:
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [84:bb:05:14:24:ba:c7:dd:41:d9:49:5e:2d:eb:78:b1]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            apk add ansible tar gzip nodejs npm
+            pip install awscli
       - run:
           name: Deploy backend
           command: |
-            # your code here
-      # Here's where you will add some code to rollback on failure  
+            # your code herex
+      - destroy-environment  
 
   smoke-test:
     docker:
       # Lightweight Docker image 
       - image: alpine:latest
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
