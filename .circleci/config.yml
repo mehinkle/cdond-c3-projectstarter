@@ -265,6 +265,9 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
+            BACKEND_IP=$(aws ec2 describe-instances --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} Name=instance-state-name,Values=running --query Reservations[*].Instances[*].PublicIpAddress --no-paginate --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+              #added above, env vars dont persist between steps
             cd frontend
             npm install
             npm run build
