@@ -27,4 +27,5 @@
     shell: |
       cd /home/ubuntu/backend
       pm2 start npm --name "backend" -- start
+      echo "started pm2"
       pm2 ls
