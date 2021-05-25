@@ -307,7 +307,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: Install dependencies, awscli
           command: |
             apk add curl nodejs npm python3 py3-pip
             pip3 install --upgrade pip
