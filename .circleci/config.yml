@@ -27,8 +27,9 @@ commands:
          #Add revert code here. You can find this in the Getting Started section.
           command: |
             SUCCESS=$(curl -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request GET https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7})
-            echo ${SUCCESS::1}
-            if(( ${SUCCESS::1} )); 
+            SUCCESS_INT=$(echo $SUCCESS | bc)
+            echo $SUCCESS_INT
+            if(( $SUCCESS_INT = 1 )); 
             then
               cd ~/project/backend
               npm install
