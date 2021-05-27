@@ -29,7 +29,7 @@ commands:
             SUCCESS=$(curl -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request GET https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7})
             SUCCESS_INT=$(echo $SUCCESS | bc)
             echo $SUCCESS_INT
-            if(( $SUCCESS_INT = 1 )); 
+            if(( 1 )); 
             then
               cd ~/project/backend
               npm install
