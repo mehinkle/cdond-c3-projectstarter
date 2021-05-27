@@ -243,7 +243,7 @@ jobs:
             then
               curl -H "Content-Type: text/plain" -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request PUT --data "1" https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
             else
-              curl -H "Content-Type: text/plain" -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request PUT --data "1" https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request PUT --data "0" https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
             fi
       - destroy-environment
       - revert-migrations
@@ -341,7 +341,7 @@ jobs:
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
             then
-            return 1
+            return 0
             else
             return 1
             fi
@@ -353,15 +353,17 @@ jobs:
       # Docker image here that supports AWS CLI
       - image: amazon/aws-cli:latest
     steps:
-      # Checkout code from git
+      - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            yum install -y gzip tar npm nodejs
+            curl -fsSL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum install -y nodejs
       - run:
           name: Update cloudfront distribution
           command: |
-            # your code here
+            zzz
       - destroy-environment
       - revert-migrations
       
