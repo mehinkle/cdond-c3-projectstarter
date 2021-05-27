@@ -21,16 +21,17 @@ commands:
     steps:
       - run:
           name: Revert migrations
+          when: on_fail
           # Add when this will run
+         # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+         #Add revert code here. You can find this in the Getting Started section.
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            SUCCESS=${curl -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request GET https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              cd ~/project/backend
+              npm install
+              npm migrations:revert
             fi
             
 jobs:
@@ -152,7 +153,10 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment
+      - revert-migrations
+
 
   configure-infrastructure:
     docker:
@@ -198,8 +202,8 @@ jobs:
             cat backend/.env
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       - destroy-environment
-      # Here's where you will add some code to rollback on failure      
-
+      - revert-migrations
+      
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
@@ -242,7 +246,8 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: f256266c-874e-4e8e-b0ef-841f99a2afe0" --request PUT --data "0." https://api.memstash.io/values/${CIRCLE_WORKFLOW_ID:0:7}
             fi
       - destroy-environment
-
+      - revert-migrations
+      
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
@@ -302,8 +307,9 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment  
-
+      - destroy-environment
+      - revert-migrations
+      
   smoke-test:
     docker:
       # Lightweight Docker image 
@@ -335,12 +341,13 @@ jobs:
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
             then
-            return 0
+            return 1
             else
             return 1
             fi
-      - destroy-environment  
-
+      - destroy-environment
+      - revert-migrations
+      
   cloudfront-update:
     docker:
       # Docker image here that supports AWS CLI
@@ -355,8 +362,9 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
-
+      - destroy-environment
+      - revert-migrations
+      
   cleanup:
     docker:
       # Docker image here
