@@ -31,7 +31,7 @@ commands:
             echo $SUCCESS_INT
             cd ~/project/backend
             npm install
-            npm migrations:revert
+            npm run migrations:revert
 
             
 jobs:
