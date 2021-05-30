@@ -363,7 +363,7 @@ jobs:
           name: Update cloudfront distribution
           command: |
             export oldId=(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --region us-west-2 --no-paginate --output text)
-            echo $oldId
+            echo Old Workflow Id: "${oldId}"
             aws cloudformation update-stack --use-previous-template --stack-name udapeople1 --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7},UsePreviousValue=false
 
       - destroy-environment
