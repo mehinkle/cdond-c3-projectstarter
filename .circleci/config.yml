@@ -371,7 +371,7 @@ jobs:
       
   cleanup:
     docker:
-      # Docker image here
+      # Docker image here,test1
       - image: amazon/aws-cli:latest
     steps:
       - checkout
